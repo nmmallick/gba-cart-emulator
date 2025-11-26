@@ -1,3 +1,6 @@
+#ifndef GPIO_H
+#define GPIO_H
+
 #include <common.h>
 
 // GPIO
@@ -60,3 +63,5 @@ inline void set_gpio_pupdr(_GPIO *GPIO, uint8_t PUPD, uint8_t pin) {
 inline void set_gpio_output(_GPIO *GPIO, uint8_t OUT, uint8_t pin) {
     GPIO->OUT |= OUT << pin;
 }
+
+#endif
