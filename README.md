@@ -9,7 +9,7 @@ Add specific links for MacOS, Linux downloads
 
 ## Add the toolchain to your path
 ### Linux + MacOS
-export PATH=$PATH:/path/to/toolchain/install
+`export PATH=$PATH:/path/to/toolchain/install`
 
 ### Build
 `$ make`
