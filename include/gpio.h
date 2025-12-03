@@ -39,7 +39,8 @@ typedef struct _GPIO {
     _MMAP_REGION OSPEED;
     _MMAP_REGION PUPDR;
     _MMAP_REGION IN;
-    _MMAP_REGION OUT;
+    _MMAP_REGION ODR;
+    _MMAP_REGION BSRR;
 } _GPIO __attribute__((aligned(sizeof(_MMAP_REGION))));
 
 static struct _GPIO *GPIOA __attribute__((unused)) = (struct _GPIO *) GPIOA_BASE_ADDR;
@@ -61,7 +62,8 @@ inline void set_gpio_pupdr(_GPIO *GPIO, uint8_t PUPD, uint8_t pin) {
 }
 
 inline void set_gpio_output(_GPIO *GPIO, uint8_t OUT, uint8_t pin) {
-    GPIO->OUT |= OUT << pin;
+    GPIO->ODR &= ~(0x01 << pin);
+    GPIO->ODR |= (OUT << pin);
 }
 
 #endif
