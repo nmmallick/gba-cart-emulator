@@ -11,8 +11,8 @@ Add specific links for MacOS, Linux downloads
 ### Linux + MacOS
 `export PATH=$PATH:/path/to/toolchain/install`
 
-### Build
+## Build
 `$ make`
 
-### [Optional] Build with debug symbols
+## [Optional] Build with debug symbols
 `$ make DEBUG=1`
