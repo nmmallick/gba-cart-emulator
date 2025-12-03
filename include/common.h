@@ -7,4 +7,6 @@
 
 #define _MMAP_REGION volatile uint32_t
 
+#define _RESERVED_ uint32_t : 32;
+
 #endif
