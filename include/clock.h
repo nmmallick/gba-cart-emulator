@@ -5,6 +5,19 @@
 
 #define RCC_BASE_ADDR 0x40023800
 
+#define PLL_ON 0x01000000
+#define PLL_OFF ~PLL_ON
+
+#define HSE_ON 0x00010000
+#define HSE_OFF ~HSE_ON
+
+#define HSI_ON 0x00000001
+#define HSI_OFF ~HSI_ON
+
+#define SYS_CLOCK_HSI 0x0000000
+#define SYS_CLOCK_HSE 0x00000001
+#define SYS_CLOCK_PLL 0x00000002
+
 typedef struct _RCC {
     _MMAP_REGION RCC_CR;
     _MMAP_REGION RCC_PLLCFGR;
@@ -12,34 +25,41 @@ typedef struct _RCC {
     _MMAP_REGION RCC_CIR;
     _MMAP_REGION RCC_AHB1RSTR;
     _MMAP_REGION RCC_AHB2RSTR;
-    _RESERVED_
-    _RESERVED_
+    _RESERVED_;
+    _RESERVED_;
     _MMAP_REGION RCC_AB1RSTR;
     _MMAP_REGION RCC_AB2RSTR;
-    _RESERVED_
-    _RESERVED_
+    _RESERVED_;
+    _RESERVED_;
     _MMAP_REGION RCC_AHB1ENR;
     _MMAP_REGION RCC_AHB2ENR;
-    _RESERVED_
-    _RESERVED_
+    _RESERVED_;
+    _RESERVED_;
     _MMAP_REGION RCC_APB1ENR;
     _MMAP_REGION RCC_APB2ENR;
-    _RESERVED_
-    _RESERVED_
+    _RESERVED_;
+    _RESERVED_;
     _MMAP_REGION AHB1LPENR;
     _MMAP_REGION AHB2LPENR;
-    _RESERVED_
-    _RESERVED_
+    _RESERVED_;
+    _RESERVED_;
     _MMAP_REGION RCC_BDCR;
     _MMAP_REGION RCC_CSR;
-    _RESERVED_
-    _RESERVED_
+    _RESERVED_;
+    _RESERVED_;
     _MMAP_REGION RCC_SSCGR;
     _MMAP_REGION RCC_PLLI2SCFGR;
-    _RESERVED_
+    _RESERVED_;
     _MMAP_REGION RCC_DCKCFGR;
 } _RCC __attribute__((aligned(sizeof(_MMAP_REGION))));
 
-static volatile struct _RCC *RCC __attribute__((unused)) = (struct _RCC *) RCC_BASE_ADDR;
+static struct _RCC *RCC __attribute__((unused)) = (struct _RCC *) RCC_BASE_ADDR;
+
+#define SET_PLLQ(value) RCC->RCC_PLLCFGR |= (value << 24);
+#define SET_PLLN(value) RCC->RCC_PLLCFGR |= (value << 6);
+#define SET_PLLP(value) RCC->RCC_PLLCFGR |= (value << 16);
+#define SET_PLLM(value) RCC->RCC_PLLCFGR |= value;
+
+#define PLL_IS_RDY() ((RCC->RCC_CR >> 25) & 0x01)
 
 #endif
