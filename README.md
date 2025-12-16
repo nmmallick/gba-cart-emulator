@@ -25,6 +25,8 @@ brew install stlink
 
 ## Building Target
 
+Getting the code to run on the microncontroller consists of Clean -> Build -> Flash.
+
 ### [Optional] Clean
 
 Optionally clean the intermediate files for a fresh build.
@@ -84,3 +86,6 @@ Run the application
 
 * Set breakpoint
 `(gdb) b main.c:22`
+
+## Acknowledgments
+- [Gekkio](https://github.com/Gekkio) for their work chronicling gameboy hardware and software.
