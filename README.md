@@ -1,29 +1,60 @@
-# gba-cart-emulator
+# Gameboy Flash Cart
+A flash cartridge for the Gameboy Advance SP (GBA SP) using the STM32F401 which can emulate digital ROMs on the original hardware.
 
-# Building Target
-## Download the arm-none-eabi 32 bit toolchain
-Look for the most recent 32-bit, bare-metal [arm toolchain](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads) (arm-none-eabi)
+## Install Dependencies
+### Install the Arm Toolchain
 
-## Download the stlink tooling
-[stlink installation](https://github.com/stlink-org/stlink?tab=readme-ov-file#installation)
+Download the most recent 32-bit, bare-metal [arm toolchain](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads) (arm-none-eabi) for your operating system.
 
-### TODO
-Add specific links for MacOS, Linux downloads
+Add the toolchain to your path.
 
-## Add the toolchain to your path
-### Linux + MacOS
-`export PATH=$PATH:/path/to/toolchain/install`
+**Linux + MacOS**
+```
+export PATH=$PATH:/path/to/toolchain/install
+```
 
-## Build
-`$ make`
 
-## [Optional] Build with debug symbols
-`$ make DEBUG=1`
+### Install STLINK Tools
 
-## Flash to the target
-`$ make flash`
+Install STLINK Tools as specified in the [stlink](https://github.com/stlink-org/stlink) repository.
 
-# Debugging With GDB
+**MacOS**
+```
+brew install stlink
+```
+
+## Building Target
+
+### [Optional] Clean
+
+Optionally clean the intermediate files for a fresh build.
+
+```
+make clean
+```
+
+### Build
+Build with or without debug symbols.
+
+```
+make
+```
+
+or
+
+```
+make DEBUG=1
+```
+
+### Flash
+Flash the build files to the microcontroller.
+
+```
+make flash
+```
+
+
+## Debugging With GDB
 > **_NOTE:_** You must build the binary with debug symbols
 
 While your stlink device is plugged in, run the `st-util` tool.
