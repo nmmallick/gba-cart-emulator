@@ -5,16 +5,34 @@
 static uint32_t count = 0;
 static uint8_t value = 0;
 
+void HardFault_Handler() {
+    while (1);
+}
+
+void MemManage_Handler() {
+    while (1);
+}
+
+void BusFault_Handler() {
+    while (1);
+}
+
+void UsageFault_Handler() {
+    while (1);
+}
+
 void SystemInit() {
+    RCC->RCC_CR &= PLL_OFF;
     // Set PLL M=8, N=84, P=2
     SET_PLLM(8);
     SET_PLLN(84);
-    SET_PLLP(2);
+    RCC->RCC_PLLCFGR &= PLLP_MASK;
+    // SET_PLLP(2); // This is wrong
 
     // Set PLL clock input source to HSI
     // Turn on PLL and HSI clocks and turn off HSE for power consumption
     RCC->RCC_CR |= PLL_ON | HSI_ON;
-    RCC->RCC_CR &= HSE_OFF;
+    RCC->RCC_CR &= HSE_OFF; // Is this my issue?
 
     while (!PLL_IS_RDY());
 
@@ -38,13 +56,13 @@ void SystemInit() {
     SYSTICK->STK_VAL = SYSTICK_COUNTER_RESET;
 
     SYSTICK->STK_LOAD = 0x00000001;
-    SYSTICK->STK_CTRL |= ENABLE_SYSTICK | ENABLE_TICKINT;
+    SYSTICK->STK_CTRL |= ENABLE_SYSTICK | ENABLE_TICKINT | 0x6;
 }
 
 void SysTick_Handler() {
     count++;
- 
-    if (count == 1000) {
+
+    if (count == 100000) {
 	if (value) {
 	    set_gpio_output(GPIOA, GPIO_LOW, 5);
 	    value = 0;
