@@ -1,6 +1,7 @@
 #include <gpio.h>
 #include <systick.h>
 #include <clock.h>
+#include <flash.h>
 
 static uint32_t count = 0;
 static uint8_t value = 0;
@@ -23,23 +24,33 @@ void UsageFault_Handler() {
 
 void SystemInit() {
     RCC->RCC_CR &= PLL_OFF;
+
     // Set PLL M=8, N=84, P=2
-    SET_PLLM(8);
-    SET_PLLN(84);
-    RCC->RCC_PLLCFGR &= PLLP_MASK;
-    // SET_PLLP(2); // This is wrong
+    SET_PLLM(8); // 2 MHZ
+    SET_PLLN(84); // 168 MHZ
+    RCC->RCC_PLLCFGR &= PLLP_MASK; // 84 MHZ
 
     // Set PLL clock input source to HSI
     // Turn on PLL and HSI clocks and turn off HSE for power consumption
     RCC->RCC_CR |= PLL_ON | HSI_ON;
-    RCC->RCC_CR &= HSE_OFF; // Is this my issue?
+    RCC->RCC_CR &= HSE_OFF;
 
     while (!PLL_IS_RDY());
 
-    // Set the system clock to use the PLL clock
+    // TODO! Update flash latency for the jump in clock speed that's
+    // about to go down
+    FLASH->FLASH_ACR &= ~0xf;
+    FLASH->FLASH_ACR |= 0x4;
+
+    if ((FLASH->FLASH_ACR & 0x0f) != 0x4)
+    {
+	HardFault_Handler();
+    }
+
+    // DANGER: Set the system clock to use the PLL clock
     RCC->RCC_CFGR |= SYS_CLOCK_PLL;
 
-    while (((RCC->RCC_CFGR >> 2) & 0x3) != SYS_CLOCK_PLL);
+    // while (((RCC->RCC_CFGR >> 2) & 0x3) != SYS_CLOCK_PLL);
 
     // Enable clock for GPIOA
     RCC->RCC_AHB1ENR |= 0x01;
