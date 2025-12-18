@@ -14,7 +14,7 @@
 #define HSI_ON 0x00000001
 #define HSI_OFF ~HSI_ON
 
-#define SYS_CLOCK_HSI 0x0000000
+#define SYS_CLOCK_HSI 0x00000000
 #define SYS_CLOCK_HSE 0x00000001
 #define SYS_CLOCK_PLL 0x00000002
 
@@ -58,7 +58,7 @@ typedef struct _RCC {
     _MMAP_REGION RCC_DCKCFGR;
 } _RCC __attribute__((aligned(sizeof(_MMAP_REGION))));
 
-static volatile struct _RCC *RCC __attribute__((unused)) = (struct _RCC *) RCC_BASE_ADDR;
+static struct _RCC *RCC __attribute__((unused)) = (struct _RCC *) RCC_BASE_ADDR;
 
 #define SET_PLLQ(value)				\
     RCC->RCC_PLLCFGR &= PLLQ_MASK;		\
