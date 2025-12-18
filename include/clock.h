@@ -18,6 +18,11 @@
 #define SYS_CLOCK_HSE 0x00000001
 #define SYS_CLOCK_PLL 0x00000002
 
+#define PLLM_MASK ~0x0000003f
+#define PLLN_MASK ~(0x000001ff << 6)
+#define PLLQ_MASK ~(0x0000000f << 24)
+#define PLLP_MASK ~(0x00000003 << 16)
+
 typedef struct _RCC {
     _MMAP_REGION RCC_CR;
     _MMAP_REGION RCC_PLLCFGR;
@@ -53,12 +58,23 @@ typedef struct _RCC {
     _MMAP_REGION RCC_DCKCFGR;
 } _RCC __attribute__((aligned(sizeof(_MMAP_REGION))));
 
-static struct _RCC *RCC __attribute__((unused)) = (struct _RCC *) RCC_BASE_ADDR;
+static volatile struct _RCC *RCC __attribute__((unused)) = (struct _RCC *) RCC_BASE_ADDR;
 
-#define SET_PLLQ(value) RCC->RCC_PLLCFGR |= (value << 24);
-#define SET_PLLN(value) RCC->RCC_PLLCFGR |= (value << 6);
-#define SET_PLLP(value) RCC->RCC_PLLCFGR |= (value << 16);
-#define SET_PLLM(value) RCC->RCC_PLLCFGR |= value;
+#define SET_PLLQ(value)				\
+    RCC->RCC_PLLCFGR &= PLLQ_MASK;		\
+    RCC->RCC_PLLCFGR |= ((uint32_t) value << 24);
+
+#define SET_PLLN(value)				\
+    RCC->RCC_PLLCFGR &= PLLN_MASK;		\
+    RCC->RCC_PLLCFGR |= ((uint32_t) value << 6);
+
+#define SET_PLLP(value)				\
+    RCC->RCC_PLLCFGR &= PLLP_MASK;		\
+    RCC->RCC_PLLCFGR |= (((uint32_t) value) << 16);
+
+#define SET_PLLM(value)				\
+    RCC->RCC_PLLCFGR &= PLLM_MASK;		\
+    RCC->RCC_PLLCFGR |= (uint32_t) value;
 
 #define PLL_IS_RDY() ((RCC->RCC_CR >> 25) & 0x01)
 
